@@ -1,2 +1,0 @@
-# JayKimProject.github.io
-lists
