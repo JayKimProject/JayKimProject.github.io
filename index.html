@@ -298,6 +298,24 @@ const HIDE_REPOS = ['JayKimProject.github.io'];
 // ── Featured project definitions ─────────────────────────────────────────────
 const FEATURED = [
   {
+    name: 'ecommerce-agent',
+    desc: 'Multi-agent e-commerce platform. 7 cooperating Claude agents — Catalog, Inventory, Order, Customer Service, Marketing, Analytics + Orchestrator. Agents exchange information peer-to-peer. SQLite store, FastAPI, interactive CLI.',
+    tags: ['multi-agent', 'ecommerce', 'claude', 'a2a', 'fastapi', 'sqlite'],
+    lang: 'Python',
+  },
+  {
+    name: 'mcp-a2a-agent',
+    desc: 'Claude-powered AI agent implementing MCP (Model Context Protocol) and A2A (Agent-to-Agent) protocols. Exposes tools via stdio, advertises capabilities via agent card, and accepts tasks over JSON-RPC 2.0. Supports multi-agent delegation.',
+    tags: ['mcp', 'a2a', 'claude', 'fastapi', 'multi-agent'],
+    lang: 'Python',
+  },
+  {
+    name: 'image-to-movie-agent',
+    desc: 'Turn images + a prompt into a timed MP4 movie. Claude Vision analyses each image, then Ken Burns (free/FFmpeg) or the best open-source AI video models — Wan 2.1 I2V (SOTA), LTX-Video, CogVideoX-5B — animate them. Set duration in minutes.',
+    tags: ['video-generation', 'claude', 'wan2.1', 'ltx-video', 'cogvideox', 'ffmpeg'],
+    lang: 'Python',
+  },
+  {
     name: 'claude-skills-agent',
     desc: '6 best Claude Code skills as agents — Skill Creator, Superpowers, GSD, /review, Context Mode, and Claude Mem. Implements plan→TDD→code→2-pass-review, parallel peer reviewers, SQLite memory, and context compression.',
     tags: ['claude', 'agents', 'skills', 'tdd', 'sqlite'],
