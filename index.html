@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jay Kim — GitHub Projects</title>
+<meta name="description" content="Selected projects and code repositories by Jay Kim, AI/ML Engineer.">
+<link rel="icon" href="https://avatars.githubusercontent.com/u/161681874?v=4">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+<style>
+  :root {
+    --bg: #0d1117;
+    --panel: #161b22;
+    --panel-2: #1c232c;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --accent-2: #1f6feb;
+    --good: #3fb950;
+    --chip: #21262d;
+    --gold: #d29922;
+    --gold-bg: #272115;
+    --gold-border: #3d2f0e;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+
+  /* ── Header ── */
+  header.site {
+    background: linear-gradient(135deg, #0d1117 0%, #1f2937 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 36px 24px;
+  }
+  header.site .inner { max-width: 1100px; margin: 0 auto; display: flex; gap: 20px; align-items: center; }
+  header.site img.avatar { width: 84px; height: 84px; border-radius: 50%; border: 2px solid var(--border); }
+  header.site h1 { margin: 0 0 4px 0; font-size: 28px; }
+  header.site p.tag { margin: 0; color: var(--muted); font-size: 14px; max-width: 720px; }
+  header.site .links { margin-top: 8px; display: flex; gap: 14px; flex-wrap: wrap; font-size: 14px; }
+
+  /* ── Featured section ── */
+  .featured-section {
+    margin: 32px 0 8px;
+  }
+  .featured-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 16px;
+  }
+  .featured-header h2 {
+    margin: 0; font-size: 18px; color: var(--gold);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .featured-header .badge {
+    font-size: 11px; background: var(--gold-bg); color: var(--gold);
+    border: 1px solid var(--gold-border); border-radius: 999px;
+    padding: 2px 8px; font-weight: 500;
+  }
+  .featured-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 14px;
+  }
+  .featured-card {
+    background: var(--gold-bg);
+    border: 1px solid var(--gold-border);
+    border-radius: 10px; padding: 18px;
+    display: flex; flex-direction: column; gap: 10px;
+    cursor: pointer;
+    transition: border-color .15s, transform .15s, box-shadow .15s;
+    position: relative;
+  }
+  .featured-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(210,153,34,0.15);
+  }
+  .featured-card .pin {
+    position: absolute; top: 14px; right: 14px;
+    font-size: 11px; color: var(--gold);
+    background: rgba(210,153,34,0.12); border-radius: 999px;
+    padding: 2px 8px; border: 1px solid var(--gold-border);
+  }
+  .featured-card .name { font-weight: 700; font-size: 16px; color: var(--gold); }
+  .featured-card .desc { color: var(--muted); font-size: 14px; flex: 1; line-height: 1.5; }
+  .featured-card .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .featured-card .tag-chip {
+    background: rgba(88,166,255,0.08); color: var(--accent);
+    border: 1px solid rgba(88,166,255,0.2); border-radius: 999px;
+    padding: 2px 9px; font-size: 11px;
+  }
+  .featured-card .meta {
+    display: flex; gap: 12px; font-size: 12px; color: var(--muted);
+    flex-wrap: wrap; align-items: center;
+  }
+  .featured-card .lang-dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: #3572A5; display: inline-block; margin-right: 4px;
+  }
+  .featured-divider {
+    border: none; border-top: 1px solid var(--border);
+    margin: 28px 0 24px;
+  }
+
+  /* ── Toolbar ── */
+  .toolbar {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    align-items: center; justify-content: space-between;
+    margin: 0 0 18px;
+  }
+  .toolbar input, .toolbar select {
+    background: var(--panel); color: var(--text);
+    border: 1px solid var(--border); border-radius: 6px;
+    padding: 8px 12px; font-size: 14px;
+  }
+  .toolbar input { flex: 1 1 280px; min-width: 200px; }
+  .toolbar .stat { color: var(--muted); font-size: 13px; }
+
+  /* ── Repo grid ── */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 14px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 8px; padding: 16px;
+    display: flex; flex-direction: column; gap: 10px;
+    cursor: pointer; transition: border-color .15s, transform .15s;
+  }
+  .card:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .card .name { font-weight: 600; font-size: 16px; color: var(--accent); word-break: break-word; }
+  .card .desc { color: var(--muted); font-size: 14px; flex: 1; }
+  .card .meta { display: flex; gap: 12px; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
+  .card .lang { display: inline-flex; align-items: center; gap: 6px; }
+  .lang .dot { width: 10px; height: 10px; border-radius: 50%; background: #888; display: inline-block; }
+  .chip { background: var(--chip); color: var(--text); border-radius: 999px; padding: 2px 9px; font-size: 11px; border: 1px solid var(--border); }
+  .topics { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  /* ── Detail view ── */
+  .detail-toolbar {
+    display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+    margin: 10px 0 18px;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--panel); color: var(--text);
+    border: 1px solid var(--border); border-radius: 6px;
+    padding: 8px 14px; font-size: 14px; cursor: pointer;
+    text-decoration: none;
+  }
+  .btn:hover { background: var(--panel-2); border-color: var(--accent); text-decoration: none; }
+  .btn.primary { background: var(--accent-2); border-color: var(--accent-2); color: white; }
+  .btn.primary:hover { filter: brightness(1.1); }
+  .repo-title { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin: 6px 0; }
+  .repo-title h2 { margin: 0; font-size: 24px; }
+  .repo-title .sub { color: var(--muted); font-size: 14px; }
+  .repo-meta { display: flex; gap: 16px; flex-wrap: wrap; color: var(--muted); font-size: 13px; margin-bottom: 14px; }
+
+  .readme {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 8px; padding: 24px 28px;
+  }
+  .readme h1, .readme h2, .readme h3, .readme h4 {
+    border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-top: 24px;
+  }
+  .readme h1:first-child { margin-top: 0; }
+  .readme code {
+    background: #1c232c; border-radius: 4px; padding: 2px 6px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px;
+  }
+  .readme pre {
+    background: #010409; border: 1px solid var(--border);
+    padding: 14px; border-radius: 6px; overflow-x: auto;
+  }
+  .readme pre code { background: none; padding: 0; }
+  .readme img { max-width: 100%; border-radius: 6px; }
+  .readme a { color: var(--accent); }
+  .readme table { border-collapse: collapse; width: 100%; }
+  .readme th, .readme td { border: 1px solid var(--border); padding: 6px 10px; }
+  .readme blockquote { border-left: 3px solid var(--border); margin: 0; padding: 4px 14px; color: var(--muted); }
+
+  .empty, .loading, .error {
+    text-align: center; color: var(--muted); padding: 60px 20px;
+  }
+  .error { color: #f85149; }
+  .spinner {
+    width: 28px; height: 28px; border: 3px solid var(--border);
+    border-top-color: var(--accent); border-radius: 50%;
+    animation: spin .8s linear infinite; display: inline-block; vertical-align: middle;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  footer.site {
+    border-top: 1px solid var(--border); margin-top: 60px; padding: 24px;
+    color: var(--muted); font-size: 13px; text-align: center;
+  }
+
+  /* Language colors */
+  .l-Python { background: #3572A5; }
+  .l-Jupyter { background: #DA5B0B; }
+  .l-JavaScript { background: #f1e05a; }
+  .l-TypeScript { background: #3178c6; }
+  .l-HTML { background: #e34c26; }
+  .l-CSS { background: #563d7c; }
+  .l-Java { background: #b07219; }
+  .l-CPP { background: #f34b7d; }
+  .l-Shell { background: #89e051; }
+  .l-Go { background: #00ADD8; }
+  .l-R { background: #198CE7; }
+  .l-Other { background: #888; }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="inner">
+    <img class="avatar" src="https://avatars.githubusercontent.com/u/161681874?v=4" alt="Jay Kim avatar">
+    <div>
+      <h1>Jay Kim — GitHub Projects</h1>
+      <p class="tag">AI/ML Engineer · LLMs, RAG, AI Agents · 10+ years building production ML systems</p>
+      <div class="links">
+        <a href="https://github.com/JayKimProject" target="_blank" rel="noopener">GitHub Profile</a>
+        <a href="https://www.linkedin.com/in/jay-kim-0a0433120/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://medium.com/@bravekjh" target="_blank" rel="noopener">Medium</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- LIST VIEW -->
+  <section id="list-view">
+
+    <!-- ── Featured Projects ── -->
+    <div class="featured-section">
+      <div class="featured-header">
+        <h2>⭐ Featured Projects</h2>
+        <span class="badge">Latest builds</span>
+      </div>
+      <div class="featured-grid" id="featured-grid">
+        <!-- Cards injected by JS -->
+      </div>
+    </div>
+
+    <hr class="featured-divider">
+
+    <!-- ── All Repos ── -->
+    <div class="toolbar">
+      <input id="search" type="search" placeholder="Search repositories by name, description, topic, or language…">
+      <select id="sort">
+        <option value="updated">Recently updated</option>
+        <option value="created">Newest</option>
+        <option value="pushed">Recently pushed</option>
+        <option value="stars">Most stars</option>
+        <option value="name">Name (A–Z)</option>
+      </select>
+      <span class="stat" id="stat"></span>
+    </div>
+    <div id="grid" class="grid"></div>
+    <div id="list-status"></div>
+  </section>
+
+  <!-- DETAIL VIEW -->
+  <section id="detail-view" style="display:none;">
+    <div class="detail-toolbar">
+      <a href="#" class="btn" id="back-btn">← All projects</a>
+      <a href="#" class="btn primary" id="github-btn" target="_blank" rel="noopener">View on GitHub ↗</a>
+    </div>
+    <div class="repo-title">
+      <h2 id="repo-name"></h2>
+      <span class="sub" id="repo-sub"></span>
+    </div>
+    <div class="repo-meta" id="repo-meta"></div>
+    <div class="topics" id="repo-topics" style="margin-bottom:14px;"></div>
+    <div id="readme" class="readme"></div>
+  </section>
+
+</main>
+
+<footer class="site">
+  Built as a static page · Hosted free on GitHub Pages · Data fetched live from the GitHub API ·
+  <a href="https://github.com/JayKimProject" target="_blank" rel="noopener">@JayKimProject</a>
+</footer>
+
+<script>
+const USER = 'JayKimProject';
+const PER_PAGE = 100;
+const HIDE_REPOS = ['JayKimProject.github.io'];
+
+// ── Featured project definitions ─────────────────────────────────────────────
+const FEATURED = [
+  {
+    name: 'claude-skills-agent',
+    desc: '6 best Claude Code skills as agents — Skill Creator, Superpowers, GSD, /review, Context Mode, and Claude Mem. Implements plan→TDD→code→2-pass-review, parallel peer reviewers, SQLite memory, and context compression.',
+    tags: ['claude', 'agents', 'skills', 'tdd', 'sqlite'],
+    lang: 'Python',
+  },
+  {
+    name: 'multi-specialist-agent',
+    desc: 'Supervisor + 7 specialist Claude agents (frontend, backend, ML, AI, full-stack, data engineer, data scientist) with shared memory layer, message bus, and peer review feedback loop.',
+    tags: ['multi-agent', 'claude', 'supervisor', 'memory'],
+    lang: 'Python',
+  },
+  {
+    name: 'vercel-gateway-agent',
+    desc: 'AI agent via Vercel AI Gateway — one API key for 100+ models. Provider routing, fallbacks, mid-conversation model switching, BYOK, and token cost tracking.',
+    tags: ['vercel', 'ai-gateway', 'multi-model', 'anthropic'],
+    lang: 'Python',
+  },
+  {
+    name: 'seedance-video-agent',
+    desc: 'Generate Minecraft tutorial videos end-to-end: Claude writes the script, Seedance 2.0 renders each scene as a video clip, ffmpeg concatenates into a final MP4.',
+    tags: ['seedance', 'video-generation', 'claude', 'ffmpeg'],
+    lang: 'Python',
+  },
+  {
+    name: 'lean-ctx-agent',
+    desc: 'Claude code agent that routes all file reads and shell calls through lean-ctx — a context runtime that compresses output 60–95% before it hits the model.',
+    tags: ['lean-ctx', 'compression', 'claude', 'agentic'],
+    lang: 'Python',
+  },
+  {
+    name: 'multi-agent-anomaly',
+    desc: 'Multi-agent system for anomaly detection and root cause analysis. Specialist agents for detection, correlation, diagnosis, and remediation, orchestrated by a supervisor.',
+    tags: ['anomaly-detection', 'multi-agent', 'claude', 'rca'],
+    lang: 'Python',
+  },
+];
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let allRepos = [];
+let filteredRepos = [];
+
+// ── DOM ───────────────────────────────────────────────────────────────────────
+const grid = document.getElementById('grid');
+const listStatus = document.getElementById('list-status');
+const searchEl = document.getElementById('search');
+const sortEl = document.getElementById('sort');
+const statEl = document.getElementById('stat');
+const listView = document.getElementById('list-view');
+const detailView = document.getElementById('detail-view');
+const backBtn = document.getElementById('back-btn');
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function fmtDate(d) {
+  return new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+function langClass(l) {
+  if (!l) return 'l-Other';
+  return 'l-' + l.replace(/\+/g, 'P').replace(/[^A-Za-z]/g, '');
+}
+function escapeHTML(s) {
+  return (s || '').replace(/[&<>"']/g, c =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])
+  );
+}
+
+// ── Featured cards ────────────────────────────────────────────────────────────
+function renderFeatured() {
+  const fg = document.getElementById('featured-grid');
+  fg.innerHTML = FEATURED.map(p => `
+    <div class="featured-card" data-name="${escapeHTML(p.name)}">
+      <span class="pin">★ pinned</span>
+      <div class="name">${escapeHTML(p.name)}</div>
+      <div class="desc">${escapeHTML(p.desc)}</div>
+      <div class="tags">${p.tags.map(t => `<span class="tag-chip">${escapeHTML(t)}</span>`).join('')}</div>
+      <div class="meta">
+        <span><span class="lang-dot"></span>${escapeHTML(p.lang)}</span>
+        <a href="https://github.com/${USER}/${encodeURIComponent(p.name)}"
+           target="_blank" rel="noopener"
+           onclick="event.stopPropagation()"
+           style="color:var(--muted);font-size:12px;">GitHub ↗</a>
+      </div>
+    </div>`).join('');
+}
+
+// ── Repo list ─────────────────────────────────────────────────────────────────
+async function loadRepos() {
+  listStatus.innerHTML = '<div class="loading"><span class="spinner"></span> Loading repositories…</div>';
+  try {
+    let page = 1, all = [];
+    while (true) {
+      const res = await fetch(
+        `https://api.github.com/users/${USER}/repos?per_page=${PER_PAGE}&page=${page}&sort=updated`
+      );
+      if (!res.ok) throw new Error(`GitHub API ${res.status} ${res.statusText}`);
+      const data = await res.json();
+      all = all.concat(data);
+      if (data.length < PER_PAGE) break;
+      page++;
+    }
+    const hideSet = new Set(HIDE_REPOS.map(n => n.toLowerCase()));
+    allRepos = all.filter(r => !hideSet.has(r.name.toLowerCase()));
+    listStatus.innerHTML = '';
+    render();
+  } catch (e) {
+    listStatus.innerHTML = `<div class="error">Could not load repositories: ${e.message}<br>
+      <small>GitHub public API is rate-limited (60 req/hr per IP). Try again shortly.</small></div>`;
+  }
+}
+
+function render() {
+  const q = searchEl.value.trim().toLowerCase();
+  filteredRepos = allRepos.filter(r => {
+    if (!q) return true;
+    const hay = [r.name, r.description || '', (r.topics || []).join(' '), r.language || '']
+      .join(' ').toLowerCase();
+    return hay.includes(q);
+  });
+  const s = sortEl.value;
+  filteredRepos.sort((a, b) => {
+    if (s === 'name')    return a.name.localeCompare(b.name);
+    if (s === 'stars')   return (b.stargazers_count || 0) - (a.stargazers_count || 0);
+    if (s === 'created') return new Date(b.created_at) - new Date(a.created_at);
+    if (s === 'pushed')  return new Date(b.pushed_at) - new Date(a.pushed_at);
+    return new Date(b.updated_at) - new Date(a.updated_at);
+  });
+  statEl.textContent = `${filteredRepos.length} of ${allRepos.length} repositories`;
+  grid.innerHTML = filteredRepos.map(repoCard).join('') ||
+    '<div class="empty">No repositories match your search.</div>';
+}
+
+function repoCard(r) {
+  const topics = (r.topics || []).slice(0, 4)
+    .map(t => `<span class="chip">${escapeHTML(t)}</span>`).join(' ');
+  return `
+    <div class="card" data-name="${escapeHTML(r.name)}">
+      <div class="name">${escapeHTML(r.name)}</div>
+      <div class="desc">${escapeHTML(r.description || 'No description provided.')}</div>
+      <div class="topics">${topics}</div>
+      <div class="meta">
+        ${r.language
+          ? `<span class="lang"><span class="dot ${langClass(r.language)}"></span>${escapeHTML(r.language)}</span>`
+          : ''}
+        <span>★ ${r.stargazers_count}</span>
+        <span>Updated ${fmtDate(r.updated_at)}</span>
+      </div>
+    </div>`;
+}
+
+// ── Detail view ───────────────────────────────────────────────────────────────
+async function showDetail(name) {
+  const repo = allRepos.find(r => r.name === name)
+    || { name, description: '', html_url: `https://github.com/${USER}/${name}`,
+         language: 'Python', stargazers_count: 0, forks_count: 0,
+         created_at: new Date().toISOString(), updated_at: new Date().toISOString(),
+         topics: [], default_branch: 'main', license: null };
+
+  listView.style.display = 'none';
+  detailView.style.display = '';
+  window.scrollTo(0, 0);
+
+  document.getElementById('repo-name').textContent = repo.name;
+  document.getElementById('repo-sub').textContent = repo.description || '';
+  document.getElementById('github-btn').href = repo.html_url;
+
+  const meta = [];
+  if (repo.language)
+    meta.push(`<span class="lang"><span class="dot ${langClass(repo.language)}"></span>${escapeHTML(repo.language)}</span>`);
+  meta.push(`★ ${repo.stargazers_count} stars`);
+  meta.push(`⑂ ${repo.forks_count} forks`);
+  meta.push(`Created ${fmtDate(repo.created_at)}`);
+  meta.push(`Updated ${fmtDate(repo.updated_at)}`);
+  if (repo.license?.spdx_id) meta.push(`License: ${escapeHTML(repo.license.spdx_id)}`);
+  document.getElementById('repo-meta').innerHTML = meta.join(' · ');
+  document.getElementById('repo-topics').innerHTML =
+    (repo.topics || []).map(t => `<span class="chip">${escapeHTML(t)}</span>`).join(' ');
+
+  const rdEl = document.getElementById('readme');
+  rdEl.innerHTML = '<div class="loading"><span class="spinner"></span> Loading README…</div>';
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${USER}/${name}/readme`,
+      { headers: { Accept: 'application/vnd.github.v3.raw' } }
+    );
+    if (res.status === 404) {
+      rdEl.innerHTML = '<p style="color:var(--muted)">This repository has no README.</p>';
+      return;
+    }
+    if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+    const md = await res.text();
+    const branch = repo.default_branch || 'main';
+    const baseRaw  = `https://raw.githubusercontent.com/${USER}/${name}/${branch}/`;
+    const baseBlob = `${repo.html_url}/blob/${branch}/`;
+    const renderer = new marked.Renderer();
+    const origImage = renderer.image.bind(renderer);
+    renderer.image = (href, title, text) => {
+      if (href && !/^https?:|^data:/i.test(href)) href = baseRaw + href.replace(/^\.?\/?/, '');
+      return origImage(href, title, text);
+    };
+    const origLink = renderer.link.bind(renderer);
+    renderer.link = (href, title, text) => {
+      if (href && !/^https?:|^mailto:|^#/i.test(href)) href = baseBlob + href.replace(/^\.?\/?/, '');
+      return origLink(href, title, text);
+    };
+    marked.use({ renderer });
+    rdEl.innerHTML = DOMPurify.sanitize(marked.parse(md));
+  } catch (e) {
+    rdEl.innerHTML = `<p class="error">Could not load README: ${escapeHTML(e.message)}</p>`;
+  }
+}
+
+function showList() {
+  detailView.style.display = 'none';
+  listView.style.display = '';
+}
+
+// ── Routing ───────────────────────────────────────────────────────────────────
+function route() {
+  const h = location.hash;
+  if (h.startsWith('#/repo/')) {
+    showDetail(decodeURIComponent(h.slice('#/repo/'.length)));
+  } else {
+    showList();
+  }
+}
+
+// ── Event wiring ──────────────────────────────────────────────────────────────
+document.addEventListener('click', e => {
+  const fc = e.target.closest('.featured-card');
+  if (fc && !e.target.closest('a')) {
+    location.hash = `#/repo/${encodeURIComponent(fc.dataset.name)}`;
+    return;
+  }
+  const rc = e.target.closest('.card');
+  if (rc) location.hash = `#/repo/${encodeURIComponent(rc.dataset.name)}`;
+});
+backBtn.addEventListener('click', e => { e.preventDefault(); location.hash = ''; });
+searchEl.addEventListener('input', render);
+sortEl.addEventListener('change', render);
+window.addEventListener('hashchange', route);
+
+// ── Boot ──────────────────────────────────────────────────────────────────────
+renderFeatured();
+(async () => {
+  await loadRepos();
+  route();
+})();
+</script>
+</body>
+</html>
