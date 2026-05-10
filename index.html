@@ -298,6 +298,12 @@ const HIDE_REPOS = ['JayKimProject.github.io'];
 // ── Featured project definitions ─────────────────────────────────────────────
 const FEATURED = [
   {
+    name: 'context-review-graph-mvp',
+    desc: 'Persist a structural map of your Python repo in SQLite, update only what changed, and feed code reviews with the smallest useful context. Blast-radius tracing across imports, callers, and tests narrows the read set before the model reasons — saving tokens and improving review accuracy.',
+    tags: ['context-engineering', 'code-review', 'ast', 'sqlite', 'git-hooks', 'python'],
+    lang: 'Python',
+  },
+  {
     name: 'context-engineering',
     desc: 'Four-layer context-aware AI assistant treating context as a finite resource. Memory (short-term buffer + long-term SQLite + episodic), BM25+TF-IDF hybrid Retrieval, Tools (calculator, clock, search), and State layers — all assembled within a token budget by Claude Haiku compression.',
     tags: ['context-engineering', 'memory', 'retrieval', 'bm25', 'claude', 'fastapi'],
