@@ -496,39 +496,21 @@ async function showDetail(name) {
     const branch = repo.default_branch || 'main';
     const baseRaw  = `https://raw.githubusercontent.com/${USER}/${name}/${branch}/`;
     const baseBlob = `${repo.html_url}/blob/${branch}/`;
-    // marked v5+ passes a token object as the first arg; older versions pass (href, title, text).
-    // Normalise both shapes so relative URLs resolve correctly against the repo base.
-    marked.use({
-      hooks: {
-        preprocess(src) { return src; },
-      },
-      renderer: {
-        image(token) {
-          // token may be an object {href,title,text} or the old positional href string
-          let href  = typeof token === 'object' ? token.href  : token;
-          let title = typeof token === 'object' ? token.title : arguments[1];
-          let text  = typeof token === 'object' ? token.text  : arguments[2];
-          if (href && !/^https?:|^data:/i.test(href)) href = baseRaw + href.replace(/^\.?\/?/, '');
-          const titleAttr = title ? ` title="${title}"` : '';
-          return `<img src="${href}"${titleAttr} alt="${text || ''}" style="max-width:100%">`;
-        },
-        link(token) {
-          let href  = typeof token === 'object' ? token.href  : token;
-          let title = typeof token === 'object' ? token.title : arguments[1];
-          // text may be a rendered string or come from token.tokens
-          let text;
-          if (typeof token === 'object') {
-            text = token.text || (token.tokens ? marked.Parser.parseInline(token.tokens) : '');
-          } else {
-            text = arguments[2];
-          }
-          if (href && !/^https?:|^mailto:|^#/i.test(href)) href = baseBlob + href.replace(/^\.?\/?/, '');
-          const titleAttr = title ? ` title="${title}"` : '';
-          return `<a href="${href || '#'}"${titleAttr} target="_blank" rel="noopener">${text}</a>`;
-        },
+    // Use walkTokens to rewrite relative URLs before rendering.
+    // This is stable across all marked versions and avoids renderer API differences.
+    const instance = new marked.Marked({
+      walkTokens(token) {
+        if (token.type === 'image') {
+          if (token.href && !/^https?:|^data:/i.test(token.href))
+            token.href = baseRaw + token.href.replace(/^\.?\/?/, '');
+        }
+        if (token.type === 'link') {
+          if (token.href && !/^https?:|^mailto:|^#/i.test(token.href))
+            token.href = baseBlob + token.href.replace(/^\.?\/?/, '');
+        }
       },
     });
-    rdEl.innerHTML = DOMPurify.sanitize(marked.parse(md));
+    rdEl.innerHTML = DOMPurify.sanitize(instance.parse(md));
   } catch (e) {
     rdEl.innerHTML = `<p class="error">Could not load README: ${escapeHTML(e.message)}</p>`;
   }
