@@ -298,6 +298,12 @@ const HIDE_REPOS = ['JayKimProject.github.io'];
 // ── Featured project definitions ─────────────────────────────────────────────
 const FEATURED = [
   {
+    name: 'multi-agent-guardrails',
+    desc: 'Production guardrail layer that sits between every agent-to-agent call. Five layers: Input/Output Validators (schema, length, confidence), PermissionRegistry (tool & peer allowlists), CircuitBreaker (stops error propagation), BudgetGuard (token & call limits), SafetyGuard (PII, secrets, injection). Immutable SQLite audit trail on every hop.',
+    tags: ['multi-agent', 'guardrails', 'safety', 'circuit-breaker', 'claude', 'fastapi'],
+    lang: 'Python',
+  },
+  {
     name: 'context-review-graph-mvp',
     desc: 'Persist a structural map of your Python repo in SQLite, update only what changed, and feed code reviews with the smallest useful context. Blast-radius tracing across imports, callers, and tests narrows the read set before the model reasons — saving tokens and improving review accuracy.',
     tags: ['context-engineering', 'code-review', 'ast', 'sqlite', 'git-hooks', 'python'],
