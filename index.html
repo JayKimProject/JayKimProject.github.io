@@ -298,6 +298,12 @@ const HIDE_REPOS = ['JayKimProject.github.io'];
 // ── Featured project definitions ─────────────────────────────────────────────
 const FEATURED = [
   {
+    name: 'labelling_agent',
+    desc: 'Autonomous data labelling pipelines on Adala: sentiment classification, multi-task labelling, and 6 label-leakage use cases (ground-truth, temporal, annotator-bias, feature, data-contamination, and pipeline leakage) each with detection strategy and mitigation.',
+    tags: ['adala', 'data-labelling', 'label-leakage', 'classification', 'sklearn', 'openai'],
+    lang: 'Python',
+  },
+  {
     name: 'graph-rag-agent',
     desc: '7-step Graph RAG system that combines knowledge graphs with vector retrieval for multi-hop reasoning. Extracts (subject, predicate, object) triples via Claude, builds a NetworkX knowledge graph, then uses 3-stage hybrid retrieval: vector similarity + entity detection + BFS k-hop graph walk. Graph-aware embeddings enrich each chunk with its neighbourhood triples. LLM-as-judge evaluation compares plain RAG vs Graph RAG on accuracy, multi-hop, and hallucination.',
     tags: ['graph-rag', 'knowledge-graph', 'networkx', 'claude', 'neo4j', 'fastapi'],
