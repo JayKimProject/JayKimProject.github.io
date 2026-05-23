@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Harness Anomaly Detector</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 3rem 2rem 2rem;
+      text-align: center;
+      background: linear-gradient(160deg, #161b22 0%, #0d1117 100%);
+      border-bottom: 1px solid #21262d;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #238636;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+      background: linear-gradient(90deg, #58a6ff, #bc8cff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    header p {
+      font-size: 1.1rem;
+      color: #8b949e;
+      max-width: 560px;
+      margin: 0 auto 1.5rem;
+      line-height: 1.6;
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.55rem 1.25rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-primary { background: #238636; color: #fff; }
+    .btn-secondary { background: #21262d; color: #e6edf3; border: 1px solid #30363d; }
+
+    main {
+      flex: 1;
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 0 1.5rem;
+      width: 100%;
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+      color: #e6edf3;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .card {
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 10px;
+      padding: 1.25rem 1.4rem;
+    }
+
+    .card-icon {
+      font-size: 1.6rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      color: #e6edf3;
+    }
+
+    .card p {
+      font-size: 0.88rem;
+      color: #8b949e;
+      line-height: 1.55;
+    }
+
+    .code-block {
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 8px;
+      padding: 1.25rem 1.4rem;
+      margin-bottom: 3rem;
+      overflow-x: auto;
+    }
+
+    .code-block pre {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: #e6edf3;
+      white-space: pre;
+    }
+
+    .code-block .comment { color: #6e7681; }
+    .code-block .cmd     { color: #79c0ff; }
+    .code-block .val     { color: #a5d6ff; }
+
+    .tools-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 3rem;
+      font-size: 0.9rem;
+    }
+
+    .tools-table th {
+      text-align: left;
+      padding: 0.6rem 1rem;
+      background: #161b22;
+      border-bottom: 1px solid #30363d;
+      color: #8b949e;
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .tools-table td {
+      padding: 0.7rem 1rem;
+      border-bottom: 1px solid #21262d;
+      color: #e6edf3;
+      vertical-align: top;
+    }
+
+    .tools-table tr:last-child td { border-bottom: none; }
+
+    code {
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 0.85em;
+      background: #161b22;
+      border: 1px solid #30363d;
+      padding: 0.15em 0.4em;
+      border-radius: 4px;
+      color: #79c0ff;
+    }
+
+    .severity { display: inline-block; padding: 0.1em 0.55em; border-radius: 2rem; font-size: 0.75rem; font-weight: 700; }
+    .high   { background: #3d1a1a; color: #f85149; }
+    .medium { background: #2d2100; color: #e3b341; }
+    .low    { background: #162032; color: #58a6ff; }
+
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      font-size: 0.82rem;
+      color: #6e7681;
+      border-top: 1px solid #21262d;
+    }
+
+    footer a { color: #58a6ff; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="badge">Claude claude-opus-4-7 · Adaptive Thinking</div>
+  <h1>Harness Anomaly Detector</h1>
+  <p>An AI agent that analyses <strong>claude-code-harness</strong> projects for guardrail violations, stuck tasks, and root causes — and produces a structured severity report.</p>
+  <div class="cta-row">
+    <a href="https://github.com/JayKimProject/harness-anomaly-detector" class="btn btn-primary">
+      &#128196; View on GitHub
+    </a>
+    <a href="https://github.com/JayKimProject/claude-code-harness" class="btn btn-secondary">
+      &#128279; claude-code-harness
+    </a>
+  </div>
+</header>
+
+<main>
+
+  <p class="section-title">What it detects</p>
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">&#128683;</div>
+      <h3>Guardrail violations</h3>
+      <p>Flags R01–R14 rule breaches: <code>sudo</code> attempts, force-push blocks, reviewer-role misuse, secret-file access, and more.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">&#128203;</div>
+      <h3>Blocked &amp; stalled tasks</h3>
+      <p>Reads <code>Plans.md</code> status markers (<code>[!]</code>, <code>[~]</code>) and surfaces tasks that are stuck or escalated.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">&#128202;</div>
+      <h3>Git history mismatches</h3>
+      <p>Cross-references completed tasks against actual commits to catch missing evidence or suspicious authorship patterns.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">&#128269;</div>
+      <h3>Tool failure patterns</h3>
+      <p>Spots repeated <code>post_tool_failure</code> and <code>permission_denied</code> events that indicate systemic rather than one-off problems.</p>
+    </div>
+  </div>
+
+  <p class="section-title">Quick start</p>
+  <div class="code-block"><pre><span class="comment"># Install</span>
+<span class="cmd">pip install</span> <span class="val">anthropic</span>
+
+<span class="comment"># Set your API key</span>
+<span class="cmd">export</span> <span class="val">ANTHROPIC_API_KEY="sk-ant-..."</span>
+
+<span class="comment"># Run against a harness project</span>
+<span class="cmd">python</span> <span class="val">anomaly_agent.py</span> \
+  --project-root /path/to/harness-project \
+  --output anomaly_report.md</pre></div>
+
+  <p class="section-title">Agent tools</p>
+  <table class="tools-table">
+    <thead>
+      <tr><th>Tool</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>read_event_logs</code></td><td>Reads all JSONL event files from <code>.claude/state/</code></td></tr>
+      <tr><td><code>read_guardrail_violations</code></td><td>Parses events for denials, violations, and tool failures grouped by rule</td></tr>
+      <tr><td><code>read_git_log</code></td><td>Retrieves recent commit history, branch, and diff statistics</td></tr>
+      <tr><td><code>read_plans</code></td><td>Reads <code>Plans.md</code> and extracts status counts and blocked tasks</td></tr>
+      <tr><td><code>read_file</code></td><td>Reads any project file safely (path-traversal protected)</td></tr>
+      <tr><td><code>list_directory</code></td><td>Lists files and folders at any path inside the project</td></tr>
+    </tbody>
+  </table>
+
+  <p class="section-title">Report format</p>
+  <div class="cards">
+    <div class="card">
+      <h3>Executive summary</h3>
+      <p>High-level overview of findings, total anomaly count, and overall health signal.</p>
+    </div>
+    <div class="card">
+      <h3>Per-anomaly block</h3>
+      <p>Description · <span class="severity high">HIGH</span> <span class="severity medium">MEDIUM</span> <span class="severity low">LOW</span> severity · evidence · root cause</p>
+    </div>
+    <div class="card">
+      <h3>Remediation steps</h3>
+      <p>Actionable recommendations tied to specific guardrail rules, tasks, or commit references.</p>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Built by <a href="https://github.com/JayKimProject">Jay Kim</a> &middot;
+  Powered by <a href="https://www.anthropic.com">Claude claude-opus-4-7</a> &middot;
+  <a href="https://github.com/JayKimProject/harness-anomaly-detector">Source</a>
+</footer>
+
+</body>
+</html>
