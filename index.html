@@ -298,6 +298,12 @@ const HIDE_REPOS = ['JayKimProject.github.io'];
 // ── Featured project definitions ─────────────────────────────────────────────
 const FEATURED = [
   {
+    name: 'vision-rag-agent',
+    desc: 'Agentic multimodal RAG: Claude autonomously decides which tools to call — local KB search (ChromaDB text + CLIP image), web_search (DuckDuckGo), fetch_url, and Wikipedia — before streaming a grounded answer. Images ingested via Claude Vision captions + CLIP embeddings. MCP server (FastMCP) runs as stdio subprocess. True tool_use loop with token streaming.',
+    tags: ['rag', 'multimodal', 'mcp', 'claude', 'clip', 'chromadb', 'tool-use'],
+    lang: 'Python',
+  },
+  {
     name: 'labelling_agent',
     desc: 'Autonomous data labelling pipelines on Adala: sentiment classification, multi-task labelling, and 6 label-leakage use cases (ground-truth, temporal, annotator-bias, feature, data-contamination, and pipeline leakage) each with detection strategy and mitigation.',
     tags: ['adala', 'data-labelling', 'label-leakage', 'classification', 'sklearn', 'openai'],
