@@ -229,6 +229,7 @@
         <a href="https://github.com/JayKimProject" target="_blank" rel="noopener">GitHub Profile</a>
         <a href="https://www.linkedin.com/in/jay-kim-0a0433120/" target="_blank" rel="noopener">LinkedIn</a>
         <a href="https://medium.com/@bravekjh" target="_blank" rel="noopener">Medium</a>
+        <a href="https://paper2tutorial-ai.fly.dev/" target="_blank" rel="noopener">Paper2Tutorial</a>
       </div>
     </div>
   </div>
@@ -297,13 +298,6 @@ const HIDE_REPOS = ['JayKimProject.github.io'];
 
 // ── Featured project definitions ─────────────────────────────────────────────
 const FEATURED = [
-  {
-    name: 'paper2tutorial',
-    desc: 'Turns current AI research papers into presenter-led tutorials with matched diagrams, original paper figures, narration, and practical build guidance.',
-    tags: ['ai-research', 'tutorials', 'arxiv', 'paperbanana', 'video-generation'],
-    lang: 'JavaScript',
-    liveUrl: 'https://paper2tutorial-ai.fly.dev/',
-  },
   {
     name: 'harness-anomaly-detector',
     desc: 'AI agent that analyses claude-code-harness projects for guardrail violations (R01–R14), stuck tasks, and git history mismatches. Uses claude-opus-4-7 with adaptive thinking and prompt caching to produce a structured anomaly report with severity ratings (HIGH/MEDIUM/LOW), root causes, and remediation steps.',
@@ -469,10 +463,6 @@ function renderFeatured() {
            target="_blank" rel="noopener"
            onclick="event.stopPropagation()"
            style="color:var(--muted);font-size:12px;">GitHub ↗</a>
-        ${p.liveUrl ? `<a href="${escapeHTML(p.liveUrl)}"
-           target="_blank" rel="noopener"
-           onclick="event.stopPropagation()"
-           style="color:var(--gold);font-size:12px;font-weight:600;">Live site ↗</a>` : ''}
       </div>
     </div>`).join('');
 }
