@@ -48,6 +48,17 @@
   header.site h1 { margin: 0 0 4px 0; font-size: 28px; }
   header.site p.tag { margin: 0; color: var(--muted); font-size: 14px; max-width: 720px; }
   header.site .links { margin-top: 8px; display: flex; gap: 14px; flex-wrap: wrap; font-size: 14px; }
+  header.site .links { align-items: center; }
+  header.site .links .paper2tutorial-btn {
+    display: inline-flex; align-items: center;
+    background: var(--accent-2); color: #fff;
+    border: 1px solid var(--accent);
+    border-radius: 6px; padding: 6px 12px;
+    font-weight: 600; line-height: 1.2;
+  }
+  header.site .links .paper2tutorial-btn:hover {
+    background: var(--accent); color: #fff; text-decoration: none;
+  }
 
   /* ── Featured section ── */
   .featured-section {
@@ -229,7 +240,7 @@
         <a href="https://github.com/JayKimProject" target="_blank" rel="noopener">GitHub Profile</a>
         <a href="https://www.linkedin.com/in/jay-kim-0a0433120/" target="_blank" rel="noopener">LinkedIn</a>
         <a href="https://medium.com/@bravekjh" target="_blank" rel="noopener">Medium</a>
-        <a href="https://paper2tutorial-ai.fly.dev/" target="_blank" rel="noopener">Paper2Tutorial</a>
+        <a class="paper2tutorial-btn" href="https://paper2tutorial-ai.fly.dev/" target="_blank" rel="noopener">paper2Tutorial ↗</a>
       </div>
     </div>
   </div>
